@@ -7,15 +7,11 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 public class Sim {
-    public static void main(String[] args) {
-        System.out.println("Please enter the arguments in the format of: <M> <N> <TraceFile>");
-        Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
-        String[] arr = input.split(" ");
 
-        int m = Integer.parseInt(arr[0]);
-        int n = Integer.parseInt(arr[1]);
-        String traceFile = "C:\\Users\\samon\\Desktop\\EEL 4768 Project 2\\mcf_trace.txt";
+    public static void main(String[] args) {
+        int m = Integer.parseInt(args[0]);
+        int n = Integer.parseInt(args[1]);
+        String traceFile = args[2];
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("0".repeat(Math.max(0, n)));
@@ -36,7 +32,7 @@ public class Sim {
         int access = result[1];
 
         // Display the results
-        display(predictionTable, access, miss);
+        display(predictionTable, access, miss, m, n);
     }
 
     private static int[] readFile (int n, int m, String PC, StringBuilder BHR, ArrayList<Integer> predictionTable, String filePath) {
@@ -79,22 +75,12 @@ public class Sim {
         return new int[]{numMiss, numAccess};
     }
 
-    private static void display (ArrayList<Integer> predictionTable, int access, int miss) {
+    private static void display (ArrayList<Integer> predictionTable, int access, int miss, int m, int n) {
         // Display the result
         DecimalFormat format = new DecimalFormat("##.00");
-        System.out.println("Number of predictions = " + access);
-        System.out.println("Number of mispredictions = " + miss);
+        String missPredictionRate = format.format((((double)miss/access)*100));
 
-        String mispredictionRate = format.format((((double)miss/access)*100));
-        System.out.println("Misprediction rate = " + mispredictionRate + "%");
-
-        /*
-        System.out.println("FINAL GSHARE CONTENTS");
-        for (int i = 0; i < predictionTable.size(); i++) {
-            System.out.println("index = " + i + " content = " + predictionTable.get(i));
-        }
-
-         */
+        System.out.println(m + " " + n + " " + missPredictionRate);
     }
 
     // Update BHR by shifting the binary to the right and inserting either 1 or 0 in front

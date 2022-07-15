@@ -1,8 +1,8 @@
 package Project3;
 
 public class Address {
-    private String nBitsAddress;
-    private String mBitsAddress;
+    private final String nBitsAddress;
+    private final String mBitsAddress;
 
     public Address (String hex, int m, int n) {
         // Convert the hex address to decimal
