@@ -1,3 +1,8 @@
+/*
+Name: Joshua Samontanez
+Course: EEL 4768 Summer 2022
+Assignment title: Project 2 - Cache Simulator
+*/
 package Project3;
 
 import java.io.BufferedReader;
@@ -32,7 +37,7 @@ public class Sim {
         int access = result[1];
 
         // Display the results
-        display(predictionTable, access, miss, m, n);
+        display(access, miss, m, n);
     }
 
     private static int[] readFile (int n, int m, String PC, StringBuilder BHR, ArrayList<Integer> predictionTable, String filePath) {
@@ -75,7 +80,7 @@ public class Sim {
         return new int[]{numMiss, numAccess};
     }
 
-    private static void display (ArrayList<Integer> predictionTable, int access, int miss, int m, int n) {
+    private static void display (int access, int miss, int m, int n) {
         // Display the result
         DecimalFormat format = new DecimalFormat("##.00");
         String missPredictionRate = format.format((((double)miss/access)*100));

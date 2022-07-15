@@ -1,3 +1,8 @@
+/*
+Name: Joshua Samontanez
+Course: EEL 4768 Summer 2022
+Assignment title: Project 2 - Branch Predictor
+*/
 package Project3;
 
 public class Address {
@@ -6,9 +11,9 @@ public class Address {
 
     public Address (String hex, int m, int n) {
         // Convert the hex address to decimal
-        int address_decimal = Integer.parseInt(hex, 16);
+        int addressDecimal = Integer.parseInt(hex, 16);
         // Convert the decimal address to binary
-        String binary = Integer.toBinaryString(address_decimal);
+        String binary = Integer.toBinaryString(addressDecimal);
         // Remove the offset
         binary = binary.substring((binary.length()- 2- m),(binary.length() - 2));
 
