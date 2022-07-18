@@ -1,8 +1,9 @@
 /*
 Name: Joshua Samontanez
 Course: EEL 4768 Summer 2022
-Assignment title: Project 2 - Cache Simulator
+Assignment title: Project 2 - Branch Predictor
 */
+
 package Project3;
 
 import java.io.BufferedReader;
@@ -12,7 +13,6 @@ import java.text.DecimalFormat;
 import java.util.*;
 
 public class Sim {
-
     public static void main(String[] args) {
         int m = Integer.parseInt(args[0]);
         int n = Integer.parseInt(args[1]);
@@ -21,24 +21,25 @@ public class Sim {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("0".repeat(Math.max(0, n)));
 
-        // Initialize the BHR and PC to all zeroes
+        // Initialize the BHR and PC register to zero
         StringBuilder BHR = new StringBuilder(stringBuilder.toString());
         String PC = stringBuilder.toString();
 
-        // Get the size of the table
+        // Calculate the size of the table
         int numPredictionReg = (int) Math.pow(2, m);
         // Create a table using the size computed previously
         ArrayList<Integer> predictionTable = new ArrayList<>(Collections.nCopies(numPredictionReg, 2));
 
         // Read the file and get the final result
         int[] result = readFile(n, m, PC, BHR, predictionTable, traceFile);
-        // Trackers
+        // Get the trackers from the result array
         int miss = result[0];
         int access = result[1];
 
-        // Display the results
+        // Display the output
         display(access, miss, m, n);
     }
+
 
     private static int[] readFile (int n, int m, String PC, StringBuilder BHR, ArrayList<Integer> predictionTable, String filePath) {
         int numMiss = 0;
@@ -102,38 +103,46 @@ public class Sim {
 
     private static int predict (ArrayList<Integer> predictionTable, int entryIndex, String state, int miss) {
         switch (predictionTable.get(entryIndex)) {
+            // If the prediction is "N" or 0
             case 0:
+                // If the actual state is taken, update the prediction to "WN" or 1
                 if (state.equals("t")){
                     int curr = predictionTable.get(entryIndex);
                     predictionTable.set(entryIndex, curr + 1);
                     miss = miss + 1;
                 }
                 break;
-
+            // If the prediction is "WN" or 1
             case 1:
+                // If the actual state is taken, update the prediction to "WT" or 2
                 if (state.equals("t")){
                     int curr = predictionTable.get(entryIndex);
                     predictionTable.set(entryIndex, curr + 1);
                     miss = miss + 1;
                 }
+                // If the actual state is not taken, update the prediction to "N" or 0
                 else if (state.equals("n")) {
                     int curr = predictionTable.get(entryIndex);
                     predictionTable.set(entryIndex, curr - 1);
                 }
                 break;
-
+            // If the prediction is "WT" or 2
             case 2:
+                // If the actual state is taken, update the prediction to "T" or 3
                 if (state.equals("t")) {
                     int curr = predictionTable.get(entryIndex);
                     predictionTable.set(entryIndex, curr + 1);
                 }
+                // If the actual state is not taken, update the prediction to "WN" or 1
                 else if (state.equals("n")) {
                     int curr = predictionTable.get(entryIndex);
                     predictionTable.set(entryIndex, curr - 1);
                     miss = miss + 1;
                 }
                 break;
+            // If the prediction is "T" or 3
             case 3:
+                // If the actual state is not taken, update the prediction to "WT" or 2
                 if (state.equals("n")) {
                     int curr = predictionTable.get(entryIndex);
                     predictionTable.set(entryIndex, curr - 1);
